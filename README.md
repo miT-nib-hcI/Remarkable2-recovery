@@ -6,7 +6,19 @@ I will also be sharing my method of creating full disk backups in case of future
 
 **It is best to read the instructions fully befor starting tue to being under time pressure while in the midst of it. And PLEASE do not just copy the commands shown!**
 
-## Prerequisits
+
+## Table of Contents
+1. [Prerequsits](#1-prerequisits)
+2. [Guide](#2-guide)
+    1. [Getting into Recovery Mode](#21-getting-into-recovery-mode)
+    2. [Recovering the RM2](#22-recovering-the-rm2)
+        1. [Recover using Firmware update files](#221-recovery-using-firmware-update-files)
+        2. [Recover using Backup](#223-recovery-using-backup)
+    3. [Creating a Backup](#3-creating-a-full-backup)
+3. [Othe usefull Articles](#other-very-usefull-guides)
+
+
+## 1. Prerequisits
 Like disgussed in ddvk´s guide you need a
 
 - USB-C Breakout Board (It needs to have a full breakout, not just  VBUS, D+ ,D-, GND) ![Picture ofUSB-C Breakout](./images/USB-C_breakout.jpg)
@@ -17,9 +29,9 @@ Like disgussed in ddvk´s guide you need a
 
 - [imx_usb_loader](https://github.com/boundarydevices/imx_usb_loader) I´ve included the version DDVK originaly gave out. It is in the imx_usb dirrectory, but can also be self-compiled.
 
-## Guide
+## 2. Guide
 
-### Getting into Recovery mode
+### 2.1 Getting into Recovery mode
 I recomend using tmux or multiple terminals due to needing to monitor multiple commands.
 
 1. Run ```dmesg -w``` to get a continual output of the Kernel Logs
@@ -36,8 +48,8 @@ I recomend using tmux or multiple terminals due to needing to monitor multiple c
 You can now mount the Mass Storage device if it were a normal USB Stick
 
 
-### Recovering the RM2
-To recover the RM2 back to normal opperation you can use a backup you have previusly made (see [Backup](#Creating a Full Backup) section) or a use the 2. Root Partition.
+### 2.2 Recovering the RM2
+To recover the RM2 back to normal opperation you can use a backup you have previusly made (see [Backup](#Creating-a-Full-Backup) section) or a use the 2. Root Partition.
 
 __I recomend even making a backup of the bricked rm2, just so you have a backup else if you make a mistake here, there is basicly very litle way of returning.__
 
@@ -52,7 +64,7 @@ The partion layout of the RM2 is as follows:
 
 If you want to access your files look in the /root/ partition.
 
-#### Recovery using Firmware Update files
+#### 2.2.1 Recovery using Firmware Update files
 Mount and look at the two root dirs (so partition 2 and 3) and figure out whitch was active during your bricking and whitch is the copy. You can do soo by looking at the modification dates of the files and the entries in the journal.
 
 After you have figured out whitch partition was active and whitch not. You can copy flash new firmware to recover the rm2
@@ -96,7 +108,7 @@ sudo cp -a /Where/ever/your/img/is/* /mnt
 repeat these steps with partition 3.
 Once Done Unmount the RM 2 and Boot. If it is still not booting, it’s reasonable to suspect there was a write error over the unideal pogo connection (keep monitoring the dmesg logs). Reset and try again.
 
-#### Recovery using backup
+#### 2.2.3 Recovery using backup
 If you have previusly made a full backup of the RM2, you can now with ease reverse the proces and write the full backup onto the RM2.
 
 **YOU WILL LOSE ALL CURRENT DATA NOT IN THE CLOUD**
@@ -106,16 +118,26 @@ EXAMPLE ```dd``` command:
 sudo dd bs=8M satus=progress if=./full-rm-img of=/dev/sde
 ```
 
-## Creating a Full Backup
+## 3. Creating a Full Backup
 To have a know source of truth and a good restore point you can create a full disk backup using dd. (For this you also need to be in recovery mode, and have access to all partitions.).
 
-Example ```dd``` command:
+EXAMPLE ```dd``` command:
 ```bash
 sudo dd bs=8M status=progress if=/dev/sde of=./full-rm-img
 ```
 Keep these backups safe as you would any other backups.
 
 # Other very usefull guides
+I could not have recoverd my own remarkable if it werent for those who have come befor me. So to give a shoutout and credit to those who i´ve base this guide on i inclouded them here.
+
+https://github.com/ddvk/remarkable2-recovery?tab=readme-ov-file
+
 https://operand.ca/2021/09/27/how_i_bricked_then_recovered_my_remarkable_2.html
 
 https://sabitech.net/post/remarkable2-pogo-flash/
+
+https://github.com/boundarydevices/imx_usb_loader
+
+https://github.com/Jayy001/codexctl
+
+https://github.com/reMarkable
